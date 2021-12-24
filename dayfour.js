@@ -98,7 +98,8 @@ function callBingoSquid (arr) {
 function resetGame(){
     for (board of boards){
         board.hasWon = false
-        for (length of board.marks){
+        let length = board.marks.length
+        for (let i=0; i<length;i++){
         board.marks.pop()
         }
     }
