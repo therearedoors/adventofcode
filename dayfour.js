@@ -31,31 +31,6 @@ calcScore() {
     }
     return console.log(score*currentCall)
 }
-WinsNow() {
-    for (let x=0;x<5;x++){
-        let bingoColumn = 0
-        for (let y=0; y<this.numbers.length; y++){
-            if (this.marks.includes(this.numbers[y][x])){
-                bingoColumn++
-            }
-            if (bingoColumn === 5){
-                return true
-            }
-        }
-    }
-    for (let y=0; y<this.numbers.length; y++) {
-        let bingoRow = 0
-        for (let x=0;x<5;x++){
-            if (this.marks.includes(this.numbers[y][x])){
-                bingoRow++
-                }
-            if (bingoRow === 5) {
-                return true
-            }
-        }
-    }   
-     return false 
-}
 
 Wins() {
     for (let x=0;x<5;x++){
@@ -97,7 +72,7 @@ function callBingoPlayer (arr) {
         currentCall = call;
         for (board of boards){
             board.markScore()
-            if (board.WinsNow()){
+            if (board.Wins()){
             return board.calcScore()
             }
         }    
