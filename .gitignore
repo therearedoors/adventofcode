@@ -1,3 +1,5 @@
+2022/i.js
+
 # Logs
 logs
 *.log
@@ -102,3 +104,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+2022/input1-2019.txt
+
+2022/input1.txt

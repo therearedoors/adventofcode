@@ -32,7 +32,7 @@ calcScore() {
     return console.log(score*currentCall)
 }
 
-Wins() {
+wins() {
     for (let x=0;x<5;x++){
         let bingoColumn = 0
         for (let y=0; y<this.numbers.length; y++){
@@ -82,9 +82,9 @@ function callBingoPlayer (arr) {
 function callBingoSquid (arr) {
     for (let i = 0; i<arr.length;i++){
         currentCall = arr[i];
-        for (board of boards){
+        for (const board of boards){
             board.markScore()
-            if (board.Wins() && board.hasWon === false){
+            if (board.wins() && board.hasWon === false){
                 winningBoards++
                 board.hasWon = true
             }
