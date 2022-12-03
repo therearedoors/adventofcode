@@ -5,8 +5,6 @@ const lines = () => data().trim().split('\n');
 
 const sum = arr => arr.reduce((a,b)=>a+b);
 
-lines().map(l => l.split(' '));
-
 
 const SCORES = {
     X: 1,
