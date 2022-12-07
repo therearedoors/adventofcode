@@ -19,7 +19,7 @@ function writeFS(next,file){
 const commands = lines();
 const numberRegex = /\d+/
 const cdRegex = /cd [^\.\s]+/
-let fileSystem = {'/':{}};
+const fileSystem = {'/':{}};
 const currentPath = [];
 const totals = {}
 
