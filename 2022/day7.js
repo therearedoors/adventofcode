@@ -51,8 +51,6 @@ for (let i=0;i<commands.length;i++){
     }
 }
 
-const totalsArray = Object.values(totals)
-
 const totalFs = totals['/'];
 
 const totalSpace = 70000000;
@@ -60,7 +58,7 @@ const totalSpace = 70000000;
 const freeSpace = 30000000;
 const spaceRequired = totalSpace - freeSpace;
 
-const dirsToDelete = totalsArray.filter(total => totalFs - total < spaceRequired)
+const dirsToDelete = Object.values(totals).filter(total => totalFs - total < spaceRequired)
 
 dirsToDelete.sort((a,b)=>a - b)
 
