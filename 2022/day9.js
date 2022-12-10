@@ -5,17 +5,16 @@ const lines = () => data().trim().split('\n');
 
 let tailPath = [];
 
-function computeMove(head,moveMethod,moveCount) {
+function computeMove(rope,moveMethod,moveCount) {
     for (let i = 0; i < moveCount; i++) {
-        head[moveMethod](1)
-        let propagator = head
-        do {
-            propagator = propagator.tail
-            propagator.computePhysics()
-
-        } while (propagator.tail !== null) ;
-        if (tailPath.filter(tuple => tuple[0] === propagator.x && tuple[1] === propagator.y).length === 0) {
-            tailPath.push([propagator.x, propagator.y])
+        rope.head[moveMethod](1);
+        let pointer = rope.head;
+        while (pointer.tail !== null) {
+            pointer = pointer.tail;
+            pointer.computePhysics();
+        }
+        if (tailPath.filter(tuple => tuple[0] === pointer.x && tuple[1] === pointer.y).length === 0) {
+            tailPath.push([pointer.x, pointer.y])
         }
     }
 }
@@ -38,25 +37,18 @@ class Rope {
         this.tail.head = current
     }
 
-    unshift() {
-        const next = this.head.tail
-        const current = new RopeKnot(this.head, next)
-        next.head = current
-        this.head.tail = current
-    }
-
     computeInstructions(lines){
         for (let i=0;i<lines.length;i++){
             const direction = lines[i][0];
             const moveCount = parseInt(lines[i].slice(2));
             switch (direction){
-                case 'U': computeMove(this.head,'moveUp',moveCount);
+                case 'U': computeMove(this,'moveUp',moveCount);
                     break;
-                case 'D': computeMove(this.head,'moveDown',moveCount);
+                case 'D': computeMove(this,'moveDown',moveCount);
                     break;
-                case 'L': computeMove(this.head,'moveLeft',moveCount);
+                case 'L': computeMove(this,'moveLeft',moveCount);
                     break;
-                case 'R': computeMove(this.head,'moveRight',moveCount);
+                case 'R': computeMove(this,'moveRight',moveCount);
                     break;
             }
         }
@@ -71,116 +63,51 @@ class RopeKnot {
         this.tail = tail;
     }
 
-    moveUp(n){
-        this.y += n;
-    }
+    moveUp = n =>  this.y += n;
+    moveDown = n =>  this.y -= n;
+    moveLeft = n => this.x -= n;
+    moveRight = n => this.x += n;
 
-    moveDown(n){
-        this.y -= n;
-    }
+    isHorizontallyParallel = () => this.y === this.head.y;
+    isVerticaLlyParallel = () => this.x === this.head.x;
 
-    moveLeft(n){
-        this.x -= n;
-    }
-
-    moveRight(n){
-        this.x += n;
-    }
-
-    isInSamePlaceAsHead(){
-        return this.isHorizontallyParallelToHead() && this.isVerticaLlyParallelToHead()
-    }
-
-    isHorizontallyParallelToHead(){
-        return this.y === this.head.y
-    }
-
-    isVerticaLlyParallelToHead(){
-        return this.x === this.head.x
-    }
-
-    isPUnitsLeftOfHead(p){
-        return this.x + p === this.head.x
-    }
-
-    isPUnitsRightOfHead(p){
-        return this.x - p === this.head.x
-    }
-
-    isPUnitsUpFromHead(p){
-        return this.y - p === this.head.y
-    }
-
-    isPUnitsDownFromHead(p){
-        return this.y + p === this.head.y
-    }
+    isLeftFromHeadBy = p => this.x + p === this.head.x;
+    isLeftFromHead = () => this.x < this.head.x;
+    isRightFromHeadBy = p => this.x - p === this.head.x;
+    isRightFromHead = () => this.x > this.head.x;
+    isUpFromHeadBy = p => this.y - p === this.head.y;
+    isUpFromHead = () => this.y > this.head.y;
+    isDownFromHeadBy = p => this.y + p === this.head.y;
+    isDownFromHead = () => this.y < this.head.y;
 
     computePhysics() {
-        if (this.isInSamePlaceAsHead()){
-          return;
+        if (this.isHorizontallyParallel()){
+            if (this.isUpFromHeadBy(2)) return ++this.y;
+            if (this.isDownFromHeadBy(2)) return --this.y;
         }
-        if (this.isHorizontallyParallelToHead()){
-            if (this.isPUnitsUpFromHead(2)){
-                this.y += 1;
-                return;
-            }
-            if (this.isPUnitsDownFromHead(2)){
-                this.y -= 1;
-                return;
-            }
+        if (this.isVerticaLlyParallel()){
+            if (this.isLeftFromHeadBy(2)) return ++this.x;
+            if (this.isRightFromHeadBy(2)) return --this.x;
         }
-        if (this.isVerticaLlyParallelToHead()){
-            if (this.isPUnitsLeftOfHead(2)){
-                this.x += 1;
-                return;
-            }
-            if (this.isPUnitsRightOfHead(2)){
-                this.x -= 1;
-                return;
-            }
-        }
-        if (this.isPUnitsUpFromHead(2)){
+        if (this.isUpFromHeadBy(2)){
             this.y -= 1;
-            if (this.isPUnitsLeftOfHead(1) || this.isPUnitsLeftOfHead(2)){
-                this.x += 1;
-                return;
-            }
-            if (this.isPUnitsRightOfHead(1) || this.isPUnitsRightOfHead(2)){
-                this.x -= 1;
-                return;
-            }
+            if (this.isLeftFromHead()) return ++this.x;
+            if (this.isRightFromHead()) return --this.x;
         }
-        if (this.isPUnitsDownFromHead(2)){
+        if (this.isDownFromHeadBy(2)){
             this.y += 1;
-            if (this.isPUnitsLeftOfHead(1) || this.isPUnitsLeftOfHead(2)){
-                this.x += 1;
-                return;
-            }
-            if (this.isPUnitsRightOfHead(1) || this.isPUnitsRightOfHead(2)){
-                this.x -= 1;
-                return;
-            }
+            if (this.isLeftFromHead()) return ++this.x;
+            if (this.isRightFromHead()) return --this.x;
         }
-        if (this.isPUnitsLeftOfHead(2)){
+        if (this.isLeftFromHeadBy(2)){
             this.x += 1;
-            if (this.isPUnitsDownFromHead(1) || this.isPUnitsDownFromHead(2)){
-                this.y += 1;
-                return;
-            }
-            if (this.isPUnitsUpFromHead(1) || this.isPUnitsUpFromHead(2)){
-                this.y -= 1;
-                return;
-            }
+            if (this.isDownFromHead()) return ++this.y;
+            if (this.isUpFromHead()) return this.y --;
         }
-        if (this.isPUnitsRightOfHead(2)){
+        if (this.isRightFromHeadBy(2)){
             this.x -= 1;
-            if (this.isPUnitsDownFromHead(1) || this.isPUnitsDownFromHead(2)){
-                this.y += 1;
-                return;
-            }
-            if (this.isPUnitsUpFromHead(1) || this.isPUnitsUpFromHead(2)){
-                this.y -= 1;
-            }
+            if (this.isDownFromHead()) return ++this.y;
+            if (this.isUpFromHead()) return --this.y;
         }
     }
 }
