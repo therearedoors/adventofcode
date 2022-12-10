@@ -4,18 +4,12 @@ const data = () => fs.readFileSync('input8.txt',{encoding: 'utf8'});
 const lines = () => data().trim().split('\n');
 const log = (...args) => console.log(...args);
 const sum = arr => arr.reduce((a,b)=>a+ +b);
-const testRaw = `30373
-25512
-65332
-33549
-35390`.trim().split('\n')
-let testMatrix = testRaw.map(line => line.split('').map(n => +n))
+
 let matrix = lines().map(line => line.split('').map(n => +n))
 
 const counted = matrix.map(row => row.map(value => false));
 const visibleMap = matrix.map(row => row.map(value => false));
-
-log(matrix.length,matrix[0].length)
+const scenicScores = []
 
 function visibleTress(matrix) {
     for (let i = 0; i < matrix.length; i++) {
@@ -28,11 +22,11 @@ function visibleTress(matrix) {
     }
     for (let i = 0; i < matrix.length; i++) {
         visibleMap[0][i] = true;
-        traverseNode(i, 0, 'w', 0,1);
+        traverseNode(i, 0, 'e', 0,1);
     }
     for (let i = 0; i < matrix.length; i++) {
         visibleMap[matrix.length-1][i] = true;
-        traverseNode(i, matrix.length - 1, 'e', 0,1);
+        traverseNode(i, matrix.length - 1, 'w', 0,1);
     }
 }
 
@@ -40,9 +34,37 @@ function incrementCoords(i,j,direction){
     let ii, jj;
     if (direction === 'n') { ii = i - 1; jj = j}
     if (direction === 's') { ii = i + 1; jj = j}
-    if (direction === 'w') { ii = i; jj = j + 1}
-    if (direction === 'e') { ii = i; jj = j - 1}
+    if (direction === 'w') { ii = i; jj = j - 1}
+    if (direction === 'e') { ii = i; jj = j + 1}
     return [ii, jj];
+}
+
+function partTwoTraversal(){
+    for (let i=0;i<matrix.length;i++){
+        for (let j=0;j<matrix.length;j++){
+            const south = traverseBack(i, j, 's', matrix[i][j],0,0, true);
+            const north = traverseBack(i, j, 'n', matrix[i][j],0, 0,true);
+            const east = traverseBack(i, j, 'e', matrix[i][j],0, 0,true);
+            const west = traverseBack(i, j, 'w', matrix[i][j],0,0,true);
+            const scenicScore = south * north * west * east;
+            scenicScores.push(scenicScore);
+        }
+    }
+}
+
+function traverseBack(i,j,direction,startingTraversalHeight,currentTraversalHeight,currentVisible,isFirstTraversal){
+    let [ii, jj] = incrementCoords(i,j,direction);
+    if (!validate(ii,jj)) return currentVisible;
+    if (startingTraversalHeight <= matrix[ii][jj]){
+        currentVisible += 1;
+        return currentVisible;
+    }
+    if (startingTraversalHeight > matrix[ii][jj]){
+        currentVisible += 1;
+        currentTraversalHeight = matrix[ii][jj];
+    }
+    if (isFirstTraversal) currentTraversalHeight = Math.min(currentTraversalHeight,matrix[ii][jj]);
+    return traverseBack(ii,jj,direction,startingTraversalHeight,currentTraversalHeight,currentVisible,false)
 }
 
 function traverseNode(i,j,direction,currentTraversalHeight,currentVisible){
@@ -57,7 +79,7 @@ function traverseNode(i,j,direction,currentTraversalHeight,currentVisible){
             currentVisible += 1;
         }
     }
-    return traverseNode(ii,jj,direction,Math.max(matrix[ii][jj],currentTraversalHeight),currentVisible)
+    return traverseNode(ii,jj,direction,currentTraversalHeight,currentVisible)
 }
 
 visibleTress(matrix)
@@ -66,6 +88,12 @@ function validate(i,j){
     return  (i >= 0 && i < matrix.length) && (j >= 0 && j < matrix.length)
 }
 
-let total = 0;
-visibleMap.forEach(row => total += sum(row))
-log(total)
+let partOneTotal = 0;
+visibleMap.forEach(row => partOneTotal += sum(row))
+//part one
+log(partOneTotal)
+partTwoTraversal()
+scenicScores.sort((a,b)=>b-a)
+//part two
+log(scenicScores[0])
+
