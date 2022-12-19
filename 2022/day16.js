@@ -4,6 +4,8 @@ const lines = data => data.trim().split('\n');
 const valveRegex = /[A-Z]{2}|\d+/g;
 const valveSets = lines(data).map(line => line.match(valveRegex));
 
+// adapted from hyper-neutrino
+
 const valves = {}
 const paths = valveSets.map(valveSet => {
     const localPaths = []
@@ -30,7 +32,7 @@ for (const valve in flows){
 
   if (valve !== 'AA') nonEmpty.push(valve);
 
-  dists[valve] = {[valve]: 0, 'AA': 0}
+  distances[valve] = {[valve]: 0, 'AA': 0}
   let visited = {valve}
   let queue = [[0,valve]]
   while (queue.length > 0){
@@ -139,16 +141,16 @@ const TRACKER = new Tracker(
 
 const cache = {};
 let count = 0;
-function dfs(time,valve,tracker){
+function depthFirstSearch(time,valve,tracker){
   if (''+time+','+valve+','+tracker.stamp() in cache) return cache[''+time+','+valve+','+tracker.stamp()];
   let maxVal = 0;
-  for (const neighbour in dists[valve]){
+  for (const neighbour in distances[valve]){
     if (tracker[neighbour]) continue;
-    let timeRemaining = time - dists[valve][neighbour] - 1;
+    let timeRemaining = time - distances[valve][neighbour] - 1;
     if (timeRemaining <= 0) continue;
     const nextTracker = tracker.clone();
     nextTracker.toggle(neighbour)
-    maxVal = Math.max(maxVal, dfs(timeRemaining, neighbour,nextTracker) + (flows[neighbour] * timeRemaining));
+    maxVal = Math.max(maxVal, depthFirstSearch(timeRemaining, neighbour,nextTracker) + (flows[neighbour] * timeRemaining));
   }
   cache[''+time+','+valve+','+tracker.stamp()] = maxVal
   return maxVal;
