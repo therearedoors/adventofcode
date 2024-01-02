@@ -33,12 +33,28 @@ public class DayTwo {
         return total;
     }
 
+    public int testPartTwo() {
+        int total = 0;
+        for (Game game : testGames) {
+            total += game.getPower();
+        }
+        return total;
+    }
+
     public int getPartOne() {
         int total = 0;
         for (Game game : games) {
             if (game.isPossible()){
                 total += game.id;
             }
+        }
+        return total;
+    }
+
+    public int getPartTwo() {
+        int total = 0;
+        for (Game game : games) {
+            total += game.getPower();
         }
         return total;
     }

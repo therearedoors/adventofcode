@@ -16,6 +16,7 @@ public class Solver {
         String[] dayTwo = parseInput("inputs/day2.txt");
         DayTwo dayTwoSolver = new DayTwo(dayTwo);
         System.out.print(String.format("Day 2 Part 1: %d\n", dayTwoSolver.getPartOne()));
+        System.out.print(String.format("Day 2 Part 2: %d\n", dayTwoSolver.getPartTwo()));
     }
 
     public static String[] parseInput(String path) {

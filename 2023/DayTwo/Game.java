@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class Game {
 
     int id;
+    int fewestRed = 0;
+    int fewestBlue = 0;
+    int fewestGreen = 0;
     List<Cubes> cubes = new ArrayList<Cubes>();
 
     final int MAX_RED = 12;
@@ -19,6 +22,21 @@ public class Game {
             String[] cubeSets = cubeList.split(", ");
             for (String cubeSet: cubeSets) {
                 cubes.add(new Cubes(cubeSet));
+        }
+        for (Cubes cube : cubes) {
+            switch (cube.getColor()) {
+                case RED:
+                    fewestRed = Math.max(fewestRed,cube.getNumber());
+                    break;
+                case BLUE:
+                    fewestBlue = Math.max(fewestBlue,cube.getNumber());
+                    break;
+                case GREEN:
+                    fewestGreen = Math.max(fewestGreen,cube.getNumber());
+                    break;
+                default:
+                    break;
+            }
         }
     }
     }
@@ -46,5 +64,9 @@ public class Game {
             }
         }
         return true;
+    }
+
+    public int getPower() {
+        return fewestRed * fewestBlue * fewestGreen;
     }
 }
