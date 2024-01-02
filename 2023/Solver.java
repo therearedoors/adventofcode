@@ -3,17 +3,19 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import DayOne.DayOne;
+import DayTwo.DayTwo;
+
 
 public class Solver {
     public static void main(String[] args) {
-        String [] dayOne = parseInput("inputs/day1.txt");
+        String[] dayOne = parseInput("inputs/day1.txt");
         DayOne dayOneSolver = new DayOne(dayOne);
-        System.out.print(String.format("\n%d\n", dayOneSolver.getPartOne()));
-        System.out.print(dayOneSolver.getPartTwo());
-        System.out.print(String.format("\n%d\n", dayOneSolver.testOne()));
-        System.out.print(String.format("\n%d\n", dayOneSolver.testTwo()));
-        System.out.print(String.format("\n%d\n", dayOneSolver.testThree()));
-        System.out.print(dayOneSolver.testFour());
+        System.out.print(String.format("Day 1 Part 1: %d\n", dayOneSolver.getPartOne()));
+        System.out.print(String.format("Day 1 Part 2: %d\n", dayOneSolver.getPartTwo()));
+        String[] dayTwo = parseInput("inputs/day2.txt");
+        DayTwo dayTwoSolver = new DayTwo(dayTwo);
+        System.out.print(String.format("Day 2 Part 1: %d\n", dayTwoSolver.getPartOne()));
     }
 
     public static String[] parseInput(String path) {

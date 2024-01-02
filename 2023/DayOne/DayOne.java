@@ -1,3 +1,5 @@
+package DayOne;
+
 public class DayOne {
     private String[] lines;
     private String[] testLines = {
