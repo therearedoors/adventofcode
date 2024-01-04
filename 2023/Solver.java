@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import DayOne.DayOne;
 import DayTwo.DayTwo;
+import DayThree.DayThree;
 
 
 public class Solver {
@@ -17,6 +18,8 @@ public class Solver {
         DayTwo dayTwoSolver = new DayTwo(dayTwo);
         System.out.print(String.format("Day 2 Part 1: %d\n", dayTwoSolver.getPartOne()));
         System.out.print(String.format("Day 2 Part 2: %d\n", dayTwoSolver.getPartTwo()));
+        String[] dayThree = parseInput("inputs/day3.txt");
+        DayThree dayThreeSolver = new DayThree(dayThree);
     }
 
     public static String[] parseInput(String path) {
