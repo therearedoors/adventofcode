@@ -56,4 +56,8 @@ Valve MJ has flow rate=0; tunnels lead to valves DC, KR
 Valve IM has flow rate=0; tunnels lead to valves OM, OF
 Valve VL has flow rate=0; tunnels lead to valves CD, WV
 Valve SB has flow rate=18; tunnels lead to valves BG, KR
+<<<<<<< HEAD
 Valve HO has flow rate=0; tunnels lead to valves JE, UE
+=======
+Valve HO has flow rate=0; tunnels lead to valves JE, UE
+>>>>>>> 657b43634e2fbcdbb8b9e6c6886283b1c775d4b9
