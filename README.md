@@ -1,1 +1,1 @@
-# 2022 solutions to Advent of Code in Node.js
+Solutions to Advent of Code in a variety of programming languages.
