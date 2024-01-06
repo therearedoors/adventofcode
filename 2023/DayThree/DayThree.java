@@ -197,4 +197,19 @@ public class DayThree {
         char symbol = matrix[x+1][y+1];
         return !Character.isDigit(symbol) && symbol != '.';
     }
+
+    private boolean digitAdjacentNorth(Gear gear, char[][] matrix){
+        int x = gear.x;
+        int y = gear.y;
+        if (x == 0) {
+            return false;
+        }
+        char c = matrix[x-1][y];
+        return Character.isDigit(c);
+
+    }
+
+    private boolean digitAdjacentSouth(Gear gear, char[][] matrix){
+        
+    }
 }
