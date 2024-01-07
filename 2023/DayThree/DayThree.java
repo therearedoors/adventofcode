@@ -64,13 +64,14 @@ public class DayThree {
             }
         }
         // TEST INPUT
-        testSetup();
+        // testSetup();
         int total = 0;
         for (Number partNumber: partNumbers) {
-            //System.out.println(String.format("\nPart number: %s\n", partNumber.getValue()));
            total += Integer.parseInt(partNumber.getValue());
         }
-        System.out.print(String.format("Day 3 Part 1: %d %d\n", numbers.size(), total));
+        System.out.print(String.format("Day 3 Part 1: %d\n", total));
+        //partTwoTest();
+        partTwo();
     }
 
     private void testSetup() {
@@ -116,6 +117,56 @@ public class DayThree {
            total += Integer.parseInt(partNumber.getValue());
         }
         System.out.println(String.format("Day 3 test Part 1: %d", total));
+    }
+
+    private void partTwo(){
+        int total = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                char c = matrix[i][j];
+                if (c == '*'){
+                    Gear gear = new Gear(i,j,matrix[i][j]);
+                    int count = 0;
+                    if (digitAdjacentNorth(gear, matrix, partNumbers)){count++;}
+                    if (digitAdjacentSouth(gear, matrix, partNumbers)){count++;}
+                    if (digitAdjacentWest(gear, matrix, partNumbers)){count++;}
+                    if (digitAdjacentEast(gear, matrix, partNumbers)){count++;}
+                    if (digitAdjacentNorthWest(gear, matrix, partNumbers)){count++;}
+                    if (digitAdjacentNorthEast(gear, matrix, partNumbers)){count++;}
+                    if (digitAdjacentSouthWest(gear, matrix, partNumbers)){count++;}
+                    if (digitAdjacentSouthEast(gear, matrix, partNumbers)){count++;}
+                    if (count == 2){
+                        total += gear.getGearRatio();
+                    }
+                }
+            }
+        }
+        System.out.println(String.format("Day 3 Part 2: %d", total));
+    }
+
+    private void partTwoTest(){
+        int total = 0;
+        for (int i = 0; i < testMatrix.length; i++) {
+            for (int j = 0; j < testMatrix[0].length; j++) {
+                char c = testMatrix[i][j];
+                if (c == '*'){
+                    Gear gear = new Gear(i,j,testMatrix[i][j]);
+                    int count = 0;
+                    if (digitAdjacentNorth(gear, testMatrix, testPartNumbers)){count++;}
+                    if (digitAdjacentSouth(gear, testMatrix, testPartNumbers)){count++;}
+                    if (digitAdjacentWest(gear, testMatrix, testPartNumbers)){count++;}
+                    if (digitAdjacentEast(gear, testMatrix, testPartNumbers)){count++;}
+                    if (digitAdjacentNorthWest(gear, testMatrix, testPartNumbers)){count++;}
+                    if (digitAdjacentNorthEast(gear, testMatrix, testPartNumbers)){count++;}
+                    if (digitAdjacentSouthWest(gear, testMatrix, testPartNumbers)){count++;}
+                    if (digitAdjacentSouthEast(gear, testMatrix, testPartNumbers)){count++;}
+                    if (count == 2){
+                        total += gear.getGearRatio();
+                    }
+                }
+            }
+        }
+        System.out.println(String.format("Day 3 Part 2 Test: %d", total));
     }
 
     private boolean symbolAdjacentNorth(Digit digit, char[][] matrix) {
@@ -198,18 +249,151 @@ public class DayThree {
         return !Character.isDigit(symbol) && symbol != '.';
     }
 
-    private boolean digitAdjacentNorth(Gear gear, char[][] matrix){
+    private boolean digitAdjacentNorth(Gear gear, char[][] matrix, List<Number> numbers){
         int x = gear.x;
         int y = gear.y;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        boolean isNewNumber = false;
         if (x == 0) {
             return false;
         }
         char c = matrix[x-1][y];
-        return Character.isDigit(c);
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x-1, y);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
 
     }
 
-    private boolean digitAdjacentSouth(Gear gear, char[][] matrix){
-        
+    private boolean digitAdjacentSouth(Gear gear, char[][] matrix, List<Number> numbers){
+        int x = gear.x;
+        int y = gear.y;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        boolean isNewNumber = false;
+        if (x == matrix.length - 1) {
+            return false;
+        }
+        char c = matrix[x+1][y];
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x+1, y);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
+    }
+
+    private boolean digitAdjacentWest(Gear gear, char[][] matrix, List<Number> numbers){
+        int x = gear.x;
+        int y = gear.y;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        boolean isNewNumber = false;
+        if (y == 0) {
+            return false;
+        }
+        char c = matrix[x][y-1];
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x, y-1);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
+    }
+
+    private boolean digitAdjacentEast(Gear gear, char[][] matrix, List<Number> numbers){
+        int x = gear.x;
+        int y = gear.y;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        boolean isNewNumber = false;
+        if (y == matrix[0].length - 1) {
+            return false;
+        }
+        char c = matrix[x][y+1];
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x, y+1);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
+    }
+
+    private boolean digitAdjacentNorthWest(Gear gear, char[][] matrix, List<Number> numbers){
+        int x = gear.x;
+        int y = gear.y;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        boolean isNewNumber = false;
+        if (x == 0 || y == 0) {
+            return false;
+        }
+        char c = matrix[x-1][y-1];
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x-1, y-1);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
+    }
+
+    private boolean digitAdjacentNorthEast(Gear gear, char[][] matrix, List<Number> numbers){
+        int x = gear.x;
+        int y = gear.y;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        boolean isNewNumber = false;
+        if (x == 0 || y == matrix[0].length - 1) {
+            return false;
+        }
+        char c = matrix[x-1][y+1];
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x-1, y+1);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
+    }
+
+    private boolean digitAdjacentSouthWest(Gear gear, char[][] matrix, List<Number> numbers) {
+        int x = gear.x;
+        int y = gear.y;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        boolean isNewNumber = false;
+        if (x == matrix.length - 1 || y == 0) {
+            return false;
+        }
+        char c = matrix[x+1][y-1];
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x+1, y-1);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
+    }
+
+    private boolean digitAdjacentSouthEast(Gear gear, char[][] matrix, List<Number> numbers){
+        int x = gear.x;
+        int y = gear.y;
+        boolean isNewNumber = false;
+        Number n = new Number(new Digit(-1, -1, 'x'));
+        if (x == matrix.length - 1 || y == matrix[0].length - 1) {
+            return false;
+        }
+        char c = matrix[x+1][y+1];
+        if (Character.isDigit(c)){
+            n = searchArrayList(numbers, x+1, y+1);
+            isNewNumber = !gear.partNumbers.contains(n);
+            if (isNewNumber) {gear.partNumbers.add(n);};
+        }
+        return Character.isDigit(c) && isNewNumber;
+    }
+
+    private Number searchArrayList(List<Number> list, int x, int y) {
+        for (Number n : list) {
+            for (Digit d: n.digits){
+                if (d.x == x && d.y == y){
+                    return n;
+                }
+            }
+        }
+        return null;
     }
 }
