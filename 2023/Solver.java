@@ -23,7 +23,6 @@ public class Solver {
         DayThree dayThreeSolver = new DayThree(dayThree);
         String[] dayFour = parseInput("inputs/day4.txt");
         DayFour dayFourSolver = new DayFour(dayFour);
-        dayFourSolver.test();
     }
 
     public static String[] parseInput(String path) {
