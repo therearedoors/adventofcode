@@ -7,6 +7,7 @@ import DayOne.DayOne;
 import DayTwo.DayTwo;
 import DayThree.DayThree;
 import DayFour.DayFour;
+import DaySix.DaySix;
 
 
 public class Solver {
@@ -23,6 +24,9 @@ public class Solver {
         DayThree dayThreeSolver = new DayThree(dayThree);
         String[] dayFour = parseInput("inputs/day4.txt");
         DayFour dayFourSolver = new DayFour(dayFour);
+        String[] daySix = parseInput("inputs/day6.txt");
+        DaySix daySixSolver = new DaySix(daySix);
+        daySixSolver.solve();
     }
 
     public static String[] parseInput(String path) {
