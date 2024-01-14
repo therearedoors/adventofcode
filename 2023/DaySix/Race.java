@@ -1,20 +1,20 @@
 package DaySix;
 
 public class Race {
-  int time;
-  int distance;
-  int waysToWin;
+  long time;
+  long distance;
+  long waysToWin;
 
-  public Race(int t, int d){
+  public Race(long t, long d){
     this.time = t;
     this.distance = d;
     this.waysToWin = 0;
   }
 
   public void calculateWays(){
-    for (int i=1;i<time;i++){
-      int millisecondsPerMillimeter = i;
-      int distanceTravelled = millisecondsPerMillimeter * (time-i);
+    for (long i=1;i<time;i++){
+      long millisecondsPerMillimeter = i;
+      long distanceTravelled = millisecondsPerMillimeter * (time-i);
       if (distanceTravelled > distance) {
         waysToWin++;
       }
