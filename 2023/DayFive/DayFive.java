@@ -49,7 +49,7 @@ public class DayFive {
 
   public void solve(){
     long lowestLocationNumber = Long.MAX_VALUE;
-    long currentMappedValue;
+    long currentMappedValue = 0;
     for (int i=0;i<seeds.length;i++){
       long seed = seeds[i];
       currentMappedValue = seed;
@@ -66,5 +66,25 @@ public class DayFive {
       lowestLocationNumber = Math.min(lowestLocationNumber, currentMappedValue);
     }
     System.out.println(String.format("Day 5 Part 1: %d", lowestLocationNumber));
+    long lowestLocationNumberTwo = Long.MAX_VALUE;
+    for (int i=0;i<seeds.length;i+=2){
+      long seedMin = seeds[i];
+      long seedMax = seedMin+seeds[i+1];
+      for (long j=seedMin;j<=seedMax;j++){
+        currentMappedValue = j;
+        for (int k=1;k<seedMaps.length;k++){
+          SeedMap currentMap = seedMaps[k];
+          for (long source: currentMap.keySet()){
+            Destination destination = currentMap.get(source);
+            if (currentMappedValue >= source && currentMappedValue < source + destination.range){
+            currentMappedValue = destination.value + (currentMappedValue - source);
+            break;
+            }
+          }
+        }
+        lowestLocationNumberTwo = Math.min(lowestLocationNumberTwo, currentMappedValue);
+      }
     }
+    System.out.println(String.format("Day 5 Part 2: %d", lowestLocationNumberTwo));
+  }
 }
