@@ -1,5 +1,4 @@
 package DaySix;
-
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -10,6 +9,7 @@ public class DaySix {
   long[] distances;
   long partTwoTime;
   long partTwoDistance;
+
   public DaySix(String[] input){
     times = cleanInput(input[0]);
     distances = cleanInput(input[1]);
