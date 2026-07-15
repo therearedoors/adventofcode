@@ -28,15 +28,40 @@ function findHighestJoltage(numArray, highestDigit = 9, resultOfFirstCall = null
     }
 }
 
+function findHighestJoltageTwelve(numArray, highestDigit = 9, resultsOfPreviousCalls= []){
+    const buffer = 11 - resultsOfPreviousCalls.length;
+    while (highestDigit > 0) {
+        for (let i = 0; i < numArray.length - buffer; i++) {
+            if (numArray[i] === highestDigit) {
+                if (resultsOfPreviousCalls.length === 11) {
+                    resultsOfPreviousCalls.push(highestDigit);
+                    return resultsOfPreviousCalls.join('')
+                } else {
+                    resultsOfPreviousCalls.push(highestDigit);
+                        return findHighestJoltageTwelve(numArray.slice(i + 1), 9, resultsOfPreviousCalls);
+                    }
+                }
+            }
+            highestDigit--;
+        }
+
+}
+
 let part1 = 0;
 let part2 = 0;
 
 data.forEach(numArray => {
     const result = findHighestJoltage(numArray);
-    console.log(`Result for ${numArray}: ${result}`);
     part1 += Number(result);
 });
+
+data.forEach(numArray => {
+    const result = findHighestJoltageTwelve(numArray);
+    console.log(`Result for ${numArray}: ${result}`);
+    part2 += Number(result);
+})
 // need to find a 9, or and 8 or a 7 etc,
 // then one more time need to find a 9, or an 8 etc.
 
 console.log(`Part 1: ${part1}`);
+console.log(`Part 2: ${part2}`);
