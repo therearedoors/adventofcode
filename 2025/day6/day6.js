@@ -32,6 +32,7 @@ for (let i=0; i < data[0].length; i++){
         while (nextChar !== '*' && nextChar !== '+'){
             stepsToNextChar++;
             nextChar = data[4][i+stepsToNextChar];
+            if (nextChar === undefined) break;
         }
         for (let j=i;j<i+stepsToNextChar;j++){
             let operand = ''
@@ -42,7 +43,6 @@ for (let i=0; i < data[0].length; i++){
             }
             if (Number(operand) !== 0) operands.push(Number(operand))
         }
-        console.log(operands, stepsToNextChar)
         if (data[4][i] === '+'){
             part2 += operands.reduce((a,b) => a+b)
         } else if (data[4][i] === '*'){
