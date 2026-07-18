@@ -32,9 +32,6 @@ for (let i=0; i < data[0].length; i++){
         while (nextChar !== '*' && nextChar !== '+'){
             stepsToNextChar++;
             nextChar = data[4][i+stepsToNextChar];
-            if (nextChar === undefined){
-                break;
-            }
         }
         for (let j=i;j<i+stepsToNextChar;j++){
             let operand = ''
